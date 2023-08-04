@@ -7,7 +7,7 @@ requiredRam = int(input('How many RAM modules every server needs: '))
 print()
 problems = []
 for pathname in os.listdir(currentpath):
-    if os.path.isdir(currentpath + '/' + pathname) and "%3A" in pathname:
+    if os.path.isdir(currentpath + '/' + pathname) and ("%3A" in pathname or ":" in pathname):
         with open(currentpath + '/' + pathname + '/outputs/identify.json') as jsonfile:
             data = json.load(jsonfile)  # Data loading
             ram = int(data['memory']['count'])
