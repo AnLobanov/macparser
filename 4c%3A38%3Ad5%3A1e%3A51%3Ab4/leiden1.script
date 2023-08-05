@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ -c /dev/nvidia0 ]
+then
+sudo -u daniel bash -c 'source ~/.bashrc && conda init bash && conda activate tf  && /trinity/home/daniel/bench.sh' | tee -a ${SPOOLDIR}/outputs/leiden1-benchmark
+fi

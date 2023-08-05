@@ -1,0 +1,71 @@
+#!/bin/bash
+STARTTIME=`/usr/bin/perl -e 'print time();'`
+echo "Looping disks..."
+declare -a diskarray=()
+declare -a spinningarray=()
+declare -a ssdarray=()
+declare -a nvmearray=()
+for disk in `lsblk | grep disk | awk '{print $1}'`; do
+if `grep -q 1 /sys/block/$disk/queue/rotational`
+then
+spinningarray+=("${disk}")
+elif [[ "$disk" =~ ^nvme.*$ ]]
+then
+nvmearray+=("${disk}")
+else
+ssdarray+=("${disk}")
+fi
+diskarray+=("${disk}")
+done
+lastitem=$(( ${#diskarray[*]} - 1 ))
+if [[ ${#nvmearray[*]} > 0 ]]
+then
+lastdisk=${nvmearray[-1]}
+elif [[ ${#ssdarray[*]} > 0 ]]
+then
+lastdisk=${ssdarray[-1]}
+elif [[ ${#spinningarray[*]} > 0 ]]
+then
+lastdisk=${spinningarray[-1]}
+fi
+i=0
+section=18
+echo "${#spinningarray[*]} spinning disks found"
+echo "${#ssdarray[*]} ssd disks found"
+echo "${#nvmearray[*]} nvme disks found"
+if [[ ${#spinningarray[*]} > $section ]]
+then
+echo "Too many disks for one run."
+if [[ $((${#spinningarray[*]} % $section)) > 0 ]]
+then
+section=$(( ${#spinningarray[*]} / $section + 1 ))
+echo $section
+section=$(( ${#spinningarray[*]} / $section ))
+if [[ $((${#spinningarray[*]} % $section)) > 0 ]]
+then
+section=$(( $section + 1 ))
+fi
+else
+section=$(( ${#spinningarray[*]} / $section ))
+section=$(( ${#spinningarray[*]} / $section ))
+fi
+fi
+echo "Sectioning disks into sets of $section disks"
+for ldisk in "${spinningarray[@]}" "${ssdarray[@]}" "${nvmearray[@]}"; do
+if [[ `grep -q ${ldisk} /proc/mounts` ]]; then
+echo "Skipping ${ldisk}"
+else
+let i+=1
+test_array+=("${ldisk}")
+fi
+if [[ $i -eq $section ]] || [[ "${ldisk}" == "${lastdisk}" ]] ; then
+echo "Starting (max) ${section} disk tests on ${test_array[*]}"
+for tdisk in "${test_array[@]}"; do
+dd of=/dev/null if=/dev/${tdisk} iflag=direct bs=1M 2>&1 | tee ${SPOOLDIR}/outputs/burn2-readonly-${tdisk} &
+done
+wait
+test_array=()
+i=0
+fi
+done
+/trinity/shared/apps/graph/disk.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn2-readonly ${SPOOLDIR}

@@ -1,0 +1,10 @@
+#!/bin/bash
+/trinity/shared/apps/peakperf/peakperf --device cpu | tee ${SPOOLDIR}/outputs/bench0-cpu
+if [ $? -eq 1 ]
+then
+/trinity/shared/apps/peakperf/peakperf --device cpu -b skylake_512 | tee ${SPOOLDIR}/outputs/bench0-cpu
+fi
+for gpu in `ls /dev/nvidia[0-9]* | sed 's/.*nvidia//g'`
+do
+/trinity/shared/apps/peakperf/peakperf --gpu-id $gpu --device gpu | tee ${SPOOLDIR}/outputs/bench0-gpu-$gpu
+done

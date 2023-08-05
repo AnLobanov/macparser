@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ ! -f ${SPOOLDIR}/cycle ]; then echo 0 > ${SPOOLDIR}/cycle; fi
+CYCLECOUNT=`cat ${SPOOLDIR}/cycle`
+let CYCLECOUNT+=1
+echo $CYCLECOUNT > ${SPOOLDIR}/cycle
+echo "Cycling ${CYCLECOUNT}..."
+sleep 10
+if [ ${CYCLECOUNT} -ge 3 ]; then touch ${SPOOLDIR}/burn6.completed; else /usr/bin/ipmitool power reset; fi
+sleep 60

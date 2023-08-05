@@ -1,0 +1,10 @@
+   1 | 12/31/1999 | 19:03:21 | Event Logging Disabled #0x5f | Log area reset/cleared | Asserted
+   2 | 12/31/1999 | 23:28:52 | Other #0x70 |  | Asserted
+   3 | 12/31/1999 | 23:28:53 | Other #0x7e |  | Asserted
+   4 | 12/31/1999 | 23:29:49 | System Event | Timestamp Clock Sync | Asserted
+   5 | 08/01/2023 | 16:43:59 | System Event | Timestamp Clock Sync | Asserted
+   6 | 08/01/2023 | 16:44:25 | Other #0x7e |  | Asserted
+   7 | 08/01/2023 | 16:46:24 | Other #0x7e |  | Asserted
+   8 | 08/01/2023 | 16:50:26 | Other #0x70 |  | Asserted
+   9 | 08/01/2023 | 16:50:26 | Other #0x7e |  | Asserted
+   a | 08/01/2023 | 16:52:23 | Other #0x7e |  | Asserted

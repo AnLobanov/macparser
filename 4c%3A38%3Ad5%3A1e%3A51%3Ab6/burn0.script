@@ -1,0 +1,15 @@
+#!/bin/bash
+/usr/bin/ipmitool sel list | tee -a ${SPOOLDIR}/outputs/sel-before-burn
+/usr/bin/ipmitool sel clear
+STARTTIME=`/usr/bin/perl -e 'print time();'`
+echo "Running maxtrix (5m)"
+timeout 6m stress-ng --matrix 0 --matrix-method all -t 5m --metrics-brief --log-file ${SPOOLDIR}/outputs/burn0-stress-ng-matrix
+/trinity/shared/apps/graph/cpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn0-stress-ng-matrix ${SPOOLDIR}
+STARTTIME=`/usr/bin/perl -e 'print time();'`
+echo "Verifying computations (5m)"
+timeout 6m stress-ng --cpu 0 --cpu-method all --verify -t 5m --metrics-brief --log-file ${SPOOLDIR}/outputs/burn0-stress-ng-verify
+/trinity/shared/apps/graph/cpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn0-stress-ng-verify ${SPOOLDIR}
+STARTTIME=`/usr/bin/perl -e 'print time();'`
+echo "Running mprime95 (10m)"
+timeout 10m /trinity/shared/apps/mprime/30.3b6/mprime -t 2>&1 > /dev/null | tee -a ${SPOOLDIR}/outputs/burn0-mprime
+/trinity/shared/apps/graph/cpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn0-mprime ${SPOOLDIR}

@@ -1,0 +1,4 @@
+#!/bin/bash
+/usr/bin/ipmitool sel list | tee -a ${SPOOLDIR}/outputs/sel-log
+/usr/bin/touch ${SPOOLDIR}/shutdown.completed
+/usr/sbin/shutdown --poweroff &
