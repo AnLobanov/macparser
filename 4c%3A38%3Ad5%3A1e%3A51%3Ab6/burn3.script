@@ -1,2 +1,0 @@
-#!/bin/bash
-ibv_devinfo | tee -a ${SPOOLDIR}/outputs/burn3-ib

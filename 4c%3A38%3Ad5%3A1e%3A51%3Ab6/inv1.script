@@ -1,4 +1,0 @@
-#!/bin/bash
-mkdir -p ${SPOOLDIR}/outputs/
-source /trinity/shared/apps/identify/venv/bin/activate
-/trinity/shared/apps/identify/identify.py --output ${SPOOLDIR}/outputs/identify.json --email burn@clustervision.com

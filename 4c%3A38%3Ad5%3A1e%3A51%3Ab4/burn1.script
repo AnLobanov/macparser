@@ -1,9 +1,0 @@
-#!/bin/bash
-STARTTIME=`/usr/bin/perl -e 'print time();'`
-echo "Running memtest (2h)"
-timeout 61m stress-ng --vm 0 --vm-bytes 90% -t 1h --vm-method  move-inv --metrics-brief | tee -a ${SPOOLDIR}/outputs/burn1-move-inv
-/trinity/shared/apps/graph/cpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn1-move-inv ${SPOOLDIR}
-STARTTIME=`/usr/bin/perl -e 'print time();'`
-echo "Running memcpy (2h)"
-timeout 61m stress-ng --memcpy 0 -t 1h --metrics-brief | tee -a ${SPOOLDIR}/outputs/burn1-memcpy
-/trinity/shared/apps/graph/cpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn1-memcpy ${SPOOLDIR}

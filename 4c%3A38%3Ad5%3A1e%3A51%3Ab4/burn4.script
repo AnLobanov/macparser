@@ -1,9 +1,0 @@
-#!/bin/bash
-if [ -c /dev/nvidia0 ]
-then
-STARTTIME=`/usr/bin/perl -e 'print time();'`
-nvidia-smi | tee -a ${SPOOLDIR}/outputs/burn5-nvidia-smi
-cd /trinity/shared/apps/gpu-burn
-timeout 7260s ./gpu_burn 7200 | tee -a ${SPOOLDIR}/outputs/burn5-gpu_burn
-/trinity/shared/apps/graph/gpu.sh ${STARTTIME} `/usr/bin/perl -e 'print time();'` `hostname -f` burn4 ${SPOOLDIR}
-fi

@@ -1,3 +1,0 @@
-#!/bin/bash
-timeout 5m /trinity/shared/apps/stream/stream.exe | tee -a ${SPOOLDIR}/outputs/bench1-stream
-timeout 5m /trinity/shared/apps/stream/stream_omp.exe | tee -a ${SPOOLDIR}/outputs/bench1-stream_omp
